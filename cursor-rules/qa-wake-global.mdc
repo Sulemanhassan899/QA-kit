@@ -1,0 +1,49 @@
+---
+description: Global QA wake phrases — works in every Cursor project
+alwaysApply: true
+---
+
+# Global QA wake (all projects)
+
+Kit home: `~/Documents/QA-kit/` (or symlink `~/Documents/cursor-qa`)  
+Read `~/Documents/QA-kit/WAKE.md` and `~/Documents/QA-kit/RULES.md`.
+
+## Resolve QA_ROOT first (every wake)
+
+```bash
+QA_ROOT=$(bash ~/Documents/QA-kit/tools/resolve-qa-root.sh "$(pwd)")
+echo "$QA_ROOT"
+```
+
+If the project is new, resolve/init creates `~/Documents/QA-kit/projects/<folder-name>/`.
+
+Shared:
+
+- Credentials: `$QA_ROOT/credentials.local.yaml` (message overrides win)
+- Device: `bash ~/Documents/QA-kit/tools/pick-device.sh`
+- Write **only** `$QA_ROOT/results/` and `$QA_ROOT/reports/`
+- Prefer project agents under `$QA_ROOT/agents/`; else use `~/Documents/QA-kit/agents/`
+- **Never** edit product source as part of QA
+
+---
+
+## A) Release / full
+
+> make a apk release build and wake up the QA agent
+
+1. Build release for **this** workspace  
+2. Orchestrator: `$QA_ROOT/agents/00-orchestrator.md` or kit `00-orchestrator.md`  
+3. `run_id` = `YYYYMMDD-HHMM-release`
+
+## B) Debug / screen
+
+> wake up the agent and QA this screen and its widgets (FILE) (WHAT_TO_QA)
+
+1. Debug mode — no release build required  
+2. Agent: `$QA_ROOT/agents/08-screen-debug.md` or kit `08-screen-debug.md`  
+3. `run_id` = `YYYYMMDD-HHMM-debug-<screen>`
+
+## After run
+
+- Reporter / Excel if tools exist under `$QA_ROOT/tools/`
+- If `$QA_ROOT/tools/ensure-live-guide.sh` exists, run it with `run_id`

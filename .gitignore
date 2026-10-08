@@ -1,0 +1,11 @@
+.DS_Store
+**/credentials.local.yaml
+**/node_modules/
+projects/*/
+!projects/registry.yaml
+!projects/_template/
+!projects/_template/**
+*.xlsx
+*.csv
+results/
+reports/
