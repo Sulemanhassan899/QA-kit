@@ -1,6 +1,5 @@
 # Maps workspace folders → QA data roots.
-projects:
-  obecno:
-    workspace_paths:
-      - /Users/hassan/Downloads/obecno
-    qa_root: /Users/hassan/Documents/obecno-archify/qa
+# After install on a machine, init-project-qa.sh appends entries here.
+# For machine-specific paths, use registry.local.yaml (gitignored).
+
+projects: {}

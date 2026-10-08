@@ -9,3 +9,4 @@ projects/*/
 *.csv
 results/
 reports/
+projects/registry.local.yaml

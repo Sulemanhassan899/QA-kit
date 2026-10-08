@@ -11,12 +11,13 @@ else
   KIT="$HOME/Documents/QA-kit"
 fi
 
-REGISTRY="$KIT/projects/registry.yaml"
 BASE="$KIT/projects"
 NAME="$(basename "$WS")"
 
-if [ -f "$REGISTRY" ]; then
-  IN_MATCH=""
+resolve_from_registry() {
+  local REGISTRY="$1"
+  [ -f "$REGISTRY" ] || return 1
+  local IN_MATCH=""
   while IFS= read -r line; do
     case "$line" in
       *"qa_root:"*)
@@ -25,7 +26,7 @@ if [ -f "$REGISTRY" ]; then
           ROOT="${ROOT/#\~/$HOME}"
           if [ -d "$ROOT" ]; then
             echo "$ROOT"
-            exit 0
+            return 0
           fi
         fi
         ;;
@@ -39,9 +40,25 @@ if [ -f "$REGISTRY" ]; then
         ;;
     esac
   done < "$REGISTRY"
+  return 1
+}
+
+# Prefer machine-local override (not committed)
+if ROOT=$(resolve_from_registry "$KIT/projects/registry.local.yaml"); then
+  echo "$ROOT"
+  exit 0
+fi
+if ROOT=$(resolve_from_registry "$KIT/projects/registry.yaml"); then
+  echo "$ROOT"
+  exit 0
 fi
 
 if [ -d "$BASE/$NAME" ]; then
+  # Prefer external archify-style path if present for known apps
+  if [ "$NAME" = "obecno" ] && [ -d "$HOME/Documents/obecno-archify/qa" ]; then
+    echo "$HOME/Documents/obecno-archify/qa"
+    exit 0
+  fi
   echo "$BASE/$NAME"
   exit 0
 fi
