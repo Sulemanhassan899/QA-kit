@@ -74,3 +74,9 @@ projects:
 ```
 
 Or run `init-project-qa.sh` and copy/symlink that data in.
+
+## Parallel QA (5 devices)
+
+After init, ensure `catalog/shards.json`, `catalog/profiles/profiles.yaml`, and tools
+`pick-devices.sh`, `plan-run.sh`, `merge-shards.mjs`, `promote-draft.sh` exist under QA_ROOT.
+Wake with `profile: smoke|changed|full` and optional `devices: ...`.

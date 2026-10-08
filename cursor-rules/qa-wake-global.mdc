@@ -5,35 +5,40 @@ alwaysApply: true
 
 # Global QA wake (all projects)
 
-Kit home: `~/Documents/QA-kit/` (or symlink `~/Documents/cursor-qa`)  
+Kit home: `~/Documents/QA-kit/` (or `~/Documents/cursor-qa`)  
 Read `~/Documents/QA-kit/WAKE.md` and `~/Documents/QA-kit/RULES.md`.
 
 ## Resolve QA_ROOT first (every wake)
 
 ```bash
-QA_ROOT=$(bash ~/Documents/QA-kit/tools/resolve-qa-root.sh "$(pwd)")
+QA_ROOT=$(bash ~/Documents/QA-kit/tools/resolve-qa-root.sh "$(pwd)" 2>/dev/null \
+  || bash ~/Documents/cursor-qa/tools/resolve-qa-root.sh "$(pwd)")
 echo "$QA_ROOT"
 ```
 
-If the project is new, resolve/init creates `~/Documents/QA-kit/projects/<folder-name>/`.
+If the project is new, resolve/init creates `projects/<folder-name>/` under the kit.
 
 Shared:
 
 - Credentials: `$QA_ROOT/credentials.local.yaml` (message overrides win)
-- Device: `bash ~/Documents/QA-kit/tools/pick-device.sh`
-- Write **only** `$QA_ROOT/results/` and `$QA_ROOT/reports/`
-- Prefer project agents under `$QA_ROOT/agents/`; else use `~/Documents/QA-kit/agents/`
+- Devices: `bash $KIT/tools/pick-devices.sh` (up to 5) or `pick-device.sh`
+- Write **only** `$QA_ROOT/results/` and `$QA_ROOT/reports/` (learn agent may write `catalog/drafts/`)
+- Prefer project agents under `$QA_ROOT/agents/`; else kit `agents/`
 - **Never** edit product source as part of QA
 
 ---
 
-## A) Release / full
+## A) Release / full (parallel when devices allow)
 
 > make a apk release build and wake up the QA agent
 
+Optional in the same message: `profile: smoke|changed|full`, `devices: s1,s2,...`, credential overrides.
+
 1. Build release for **this** workspace  
 2. Orchestrator: `$QA_ROOT/agents/00-orchestrator.md` or kit `00-orchestrator.md`  
-3. `run_id` = `YYYYMMDD-HHMM-release`
+3. Plan: `plan-run.sh` → parallel `10-shard-worker` when 2+ devices  
+4. Merge shards → reporter → Excel / live guide if tools exist  
+5. `run_id` = `YYYYMMDD-HHMM-release` (or `-smoke` / `-changed`)
 
 ## B) Debug / screen
 
@@ -43,7 +48,14 @@ Shared:
 2. Agent: `$QA_ROOT/agents/08-screen-debug.md` or kit `08-screen-debug.md`  
 3. `run_id` = `YYYYMMDD-HHMM-debug-<screen>`
 
+## C) Promote draft (human)
+
+> promote QA draft DRAFT-…
+
+Runs `promote-draft.sh` — drafts are not official until promoted.
+
 ## After run
 
+- `merge-shards.mjs` if shard folders exist
 - Reporter / Excel if tools exist under `$QA_ROOT/tools/`
 - If `$QA_ROOT/tools/ensure-live-guide.sh` exists, run it with `run_id`

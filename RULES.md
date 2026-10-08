@@ -1,18 +1,26 @@
-# Global QA hard rules
+# QA Hard Rules (kit-wide)
 
-## Write only
+## Write boundaries
+Test-run agents may only write under:
 - `$QA_ROOT/results/**`
 - `$QA_ROOT/reports/**`
 
-(`QA_ROOT` = resolved project QA folder under `~/Documents/cursor-qa/projects/…` or registry.)
+Learn agent (`09-learn`) may also write:
+- `$QA_ROOT/catalog/drafts/**`
+
+Official catalog changes only via human `promote-draft.sh`.
 
 ## Forbidden
-- Editing / deleting / “fixing” product source in the app workspace as part of QA
-- Writing outside that project’s `results` / `reports`
+- Editing product app source
+- Fake Pass / Fail→Pass without re-run
+- Counting drafts in release totals before promote
+- Sharing one punch/leave account across parallel workers
 
-## Allowed
-- Read product code to understand screens (read-only)
-- Read `$QA_ROOT/credentials.local.yaml` (don’t dump passwords unless asked)
-- Install/run prebuilt or debug builds on device
-- Auto-select device via `~/Documents/cursor-qa/tools/pick-device.sh`
-- Screenshots into `$QA_ROOT/reports/<run_id>/`
+## Parallelism
+- Up to 5 devices / workers — **same** quality bar as sequential
+- Shard outputs: `results/<run_id>/shards/<shard_id>/`
+- Orchestrator merges without changing verdicts
+
+## Verdict integrity
+- Blocked ≠ Pass
+- Skip only with explicit reason

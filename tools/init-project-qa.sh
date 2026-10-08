@@ -29,8 +29,8 @@ fi
 if [ ! -f "$DEST/catalog/scenarios.json" ]; then
   echo '[]' > "$DEST/catalog/scenarios.json"
 fi
-for f in 00-orchestrator.md 08-screen-debug.md 07-reporter.md; do
-  if [ ! -f "$DEST/agents/$f" ]; then
+for f in 00-orchestrator.md 08-screen-debug.md 07-reporter.md 09-learn.md 10-shard-worker.md; do
+  if [ -f "$KIT/agents/$f" ] && [ ! -f "$DEST/agents/$f" ]; then
     cp "$KIT/agents/$f" "$DEST/agents/$f"
   fi
 done
@@ -40,9 +40,24 @@ fi
 if [ ! -f "$DEST/RULES.md" ]; then
   cp "$KIT/RULES.md" "$DEST/RULES.md"
 fi
-if [ ! -f "$DEST/tools/pick-device.sh" ]; then
-  cp "$KIT/tools/pick-device.sh" "$DEST/tools/pick-device.sh"
-  chmod +x "$DEST/tools/pick-device.sh"
+
+# Core + parallel tools
+for t in pick-device.sh pick-devices.sh plan-run.sh promote-draft.sh filter-catalog.mjs merge-shards.mjs; do
+  if [ -f "$KIT/tools/$t" ]; then
+    cp -f "$KIT/tools/$t" "$DEST/tools/$t"
+  fi
+done
+chmod +x "$DEST/tools/"*.sh 2>/dev/null || true
+
+# Parallel / learn catalog templates
+TEMPLATE_CATALOG="$KIT/templates/catalog"
+if [ -d "$TEMPLATE_CATALOG" ]; then
+  mkdir -p "$DEST/catalog/profiles" "$DEST/catalog/drafts"
+  cp -n "$TEMPLATE_CATALOG/shards.json" "$DEST/catalog/" 2>/dev/null || true
+  cp -n "$TEMPLATE_CATALOG/shards.yaml" "$DEST/catalog/" 2>/dev/null || true
+  cp -n "$TEMPLATE_CATALOG/profiles/profiles.yaml" "$DEST/catalog/profiles/" 2>/dev/null || true
+  cp -n "$TEMPLATE_CATALOG/drafts/README.md" "$DEST/catalog/drafts/" 2>/dev/null || true
+  cp -n "$TEMPLATE_CATALOG/drafts/index.json" "$DEST/catalog/drafts/" 2>/dev/null || true
 fi
 
 if [ -f "$REG" ] && ! grep -q "$WS" "$REG" 2>/dev/null; then

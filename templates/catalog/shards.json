@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "recommended_agents": 5,
+  "recommended_devices": 5,
+  "shards": [
+    {
+      "id": "smoke-lead",
+      "agent_file": "00-orchestrator.md",
+      "account": "employee_primary",
+      "modules": ["Splash", "Login", "Employee home nav"]
+    },
+    {
+      "id": "clock",
+      "agent_file": "10-shard-worker.md",
+      "account": "employee_a",
+      "modules": ["Clock Module", "Manager Clock"],
+      "layers": ["A", "B"]
+    },
+    {
+      "id": "attendance",
+      "agent_file": "10-shard-worker.md",
+      "account": "employee_b",
+      "modules": ["Attendance Module", "Edit request", "Alerts Module"],
+      "layers": ["A", "B"]
+    },
+    {
+      "id": "auth-more-quality",
+      "agent_file": "10-shard-worker.md",
+      "account": "employee_primary",
+      "modules": [
+        "Onboarding",
+        "Book a Demo",
+        "Terms",
+        "Privacy",
+        "Login",
+        "Enable permissions",
+        "More Module",
+        "Session safety",
+        "Quality"
+      ],
+      "layers": ["A", "D"]
+    },
+    {
+      "id": "manager",
+      "agent_file": "10-shard-worker.md",
+      "account": "manager_primary",
+      "modules": [
+        "Overview",
+        "Employees",
+        "Locations",
+        "Manager Attendance",
+        "Manager Alerts",
+        "Manager More",
+        "Manager home nav",
+        "Device approval",
+        "Location rules",
+        "Manager journey",
+        "Manager Clock"
+      ],
+      "layers": ["A", "B"]
+    },
+    {
+      "id": "cross",
+      "agent_file": "10-shard-worker.md",
+      "account": "manager_primary",
+      "modules": ["Alerts sync", "Role switch", "Employee journey"],
+      "layers": ["B", "C"],
+      "parallel_safe": false
+    }
+  ]
+}

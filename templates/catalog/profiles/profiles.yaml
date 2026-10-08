@@ -1,0 +1,38 @@
+# Run profiles — same quality bar; different scope.
+# "100%" means 100% of the selected profile, not a weaker pass/fail rule.
+
+smoke:
+  description: Login, main tabs, one punch — fast gate after a new build
+  target_minutes: [10, 30]
+  # Prefer explicit ids; fall back to modules if ids missing from catalog
+  case_ids:
+    - EMP-SPLASH-001
+    - EMP-LOGIN-001
+    - EMP-LOGIN-002
+    - EMP-NAV-001
+    - EMP-CLK-001
+    - EMP-ATT-001
+    - EMP-MORE-001
+  modules:
+    - Splash
+    - Login
+    - Employee home nav
+    - Clock Module
+    - Attendance Module
+    - More Module
+  layers: [A]
+  max_cases: 12
+
+changed:
+  description: Only cases touching modules listed in changed_modules.txt for this run
+  target_minutes: [30, 60]
+  # Orchestrator writes results/<run_id>/changed_modules.txt (one module name per line)
+  # If that file is empty/missing, fall back to tags containing "changed" or full layer A employee+manager
+  require_changed_modules_file: true
+  layers: [A, B, C]
+  include_related_quality: true
+
+full:
+  description: Entire official catalog (promoted scenarios only — never drafts)
+  target_minutes: [60, 90]
+  include_all: true

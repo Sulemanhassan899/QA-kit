@@ -1,0 +1,89 @@
+# Parallel shards — one worker agent per shard; ideally one device each.
+# Orchestrator assigns devices via tools/pick-devices.sh and tools/plan-run.sh.
+
+version: 1
+recommended_agents: 5
+recommended_devices: 5
+
+shards:
+  - id: smoke-lead
+    agent_file: 00-orchestrator.md
+    role: orchestrator
+    description: Mint run_id, install APK, run smoke slice, then merge + report
+    modules:
+      - Splash
+      - Login
+      - Employee home nav
+    account: employee_primary
+    parallel_with_workers: false
+    notes: Runs first (or overlaps only after APK install on all devices)
+
+  - id: clock
+    agent_file: 10-shard-worker.md
+    role: employee
+    description: Clock module (employee)
+    modules:
+      - Clock Module
+      - Manager Clock
+    account: employee_a
+    layers: [A, B]
+
+  - id: attendance
+    agent_file: 10-shard-worker.md
+    role: employee
+    description: Attendance + leave-related employee flows
+    modules:
+      - Attendance Module
+      - Edit request
+      - Alerts Module
+    account: employee_b
+    layers: [A, B]
+
+  - id: auth-more-quality
+    agent_file: 10-shard-worker.md
+    role: mixed
+    description: Auth edges, More, session, quality checks
+    modules:
+      - Onboarding
+      - Book a Demo
+      - Terms
+      - Privacy
+      - Login
+      - Enable permissions
+      - More Module
+      - Session safety
+      - Quality
+    account: employee_primary
+    layers: [A, D]
+
+  - id: manager
+    agent_file: 10-shard-worker.md
+    role: manager
+    description: Manager modules + manager journeys
+    modules:
+      - Overview
+      - Employees
+      - Locations
+      - Manager Attendance
+      - Manager Alerts
+      - Manager More
+      - Manager home nav
+      - Device approval
+      - Location rules
+      - Manager journey
+      - Manager Clock
+    account: manager_primary
+    layers: [A, B]
+
+  - id: cross
+    agent_file: 10-shard-worker.md
+    role: cross
+    description: Cross-role flows (run after shards or on free device)
+    modules:
+      - Alerts sync
+      - Role switch
+      - Employee journey
+    account: manager_primary
+    layers: [B, C]
+    parallel_safe: false
+    notes: Prefer after employee/manager shards to avoid shared-state races
