@@ -396,3 +396,13 @@ The folder for that app’s QA data (catalog, credentials, results). Resolved by
 
 Use this kit for your own projects and team QA flows.  
 Keep secrets out of git. Keep app source read-only during QA.
+
+---
+
+## Related: Archify Kit
+
+Architecture + Live Guide for every project:
+
+https://github.com/Sulemanhassan899/Archify-kit
+
+Wake: `Make the archify of this project`
