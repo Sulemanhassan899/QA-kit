@@ -69,3 +69,11 @@ Drafts under `catalog/drafts/` are **not** official until promoted.
 - Merge shards if needed: `node $QA_ROOT/tools/merge-shards.mjs "$QA_ROOT" <run_id>`
 - Prefer project Excel tool if present
 - If `$QA_ROOT/tools/ensure-live-guide.sh` exists, run it with `run_id`
+
+---
+
+## Automatic Archify (with every QA wake)
+
+QA wake **includes Archify**. The agent must run Archify for the same project and open Live Guide when done.  
+Do **not** ask for `Make the archify of this project`.  
+Opt out only with `skip_archify: true` in the same message.

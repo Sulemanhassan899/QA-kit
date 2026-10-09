@@ -406,3 +406,14 @@ Architecture + Live Guide for every project:
 https://github.com/Sulemanhassan899/Archify-kit
 
 Wake: `Make the archify of this project`
+
+---
+
+## Prefer the combined repo
+
+**Cursor-kits** (QA + Archify together, one wake):
+
+https://github.com/Sulemanhassan899/Cursor-kits
+
+QA wake automatically runs Archify and opens Live Guide. No separate Archify command.
+

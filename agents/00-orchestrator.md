@@ -103,3 +103,15 @@ Hand fails/gaps to `09-learn.md`. Drafts need **human** `promote-draft.sh` befor
 
 ## Fallback sequential order (1 device / no workers)
 01 → 03 → 02 → 04 → 05 → 06 → merge/reporter (same as historic pipeline).
+
+## Automatic Archify (mandatory on QA wake)
+
+When this orchestrator is started from a **QA wake**, you must also:
+
+1. `ARCHIFY_ROOT=$(bash ~/Documents/Cursor-kits/tools/ensure-archify-with-qa.sh <workspace>)`
+2. Follow `~/Documents/Cursor-kits/archify-kit/agents/00-orchestrator.md` (or `$HOME/Documents/Archify-kit/...`) — **you** pick agent count; do not ask the user.
+3. Do **not** tell the user to run a separate Archify wake.
+4. When QA reporting is done, always:
+   `bash ~/Documents/Cursor-kits/tools/after-qa-open-live.sh "$ARCHIFY_ROOT" "<run_id>"`
+
+Skip only if user message contains `skip_archify: true`.
